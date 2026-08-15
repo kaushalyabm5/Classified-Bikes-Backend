@@ -11,7 +11,7 @@ dotenv.config();
 const app: Application = express();
 const PORT = process.env.PORT || 5000;
 
-// Connect to Local Database
+// Connect to Database
 connectDB();
 
 // Middlewares
@@ -27,6 +27,12 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Classified Bikes Backend API is active!');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Local එකේ Run කරනකොට විතරක් app.listen වැඩ කිරීමට (Vercel වලට මෙය අවශ්‍ය නැත)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+// Vercel Serverless Function එකක් ලෙස Export කිරීම
+export default app;
